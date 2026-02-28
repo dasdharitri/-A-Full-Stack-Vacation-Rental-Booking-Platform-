@@ -22,6 +22,8 @@ const User=require("./models/user.js");
 const listingsRouter=require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter= require("./routes/user.js");
+const bookingRoutes = require("./routes/bookings.js");
+
 
 
 // const MONGO_URL ="mongodb://127.0.0.1:27017/wanderlust";
@@ -110,7 +112,9 @@ app.use((req,res,next)=>{
 
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewRouter);
-app.use("/",userRouter);
+app.use("/",userRouter); 
+app.use("/",bookingRoutes);
+
 
 
 app.all("*",(req,res,next)=>{
