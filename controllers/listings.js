@@ -5,10 +5,39 @@ const geocodingClient = mbxGeocoding({ accessToken: MAPTOKEN });
 
 
 
-module.exports.index=async(req,res)=>{
-    const allListings=await Listing.find({});
-    res.render("listings/index",{allListings});
-    };
+// module.exports.index=async(req,res)=>{
+//     const allListings=await Listing.find({});
+//     res.render("listings/index",{allListings});
+//     };
+
+module.exports.index = async (req, res) => {
+    let { search, category } = req.query;
+
+    let filter = {};
+
+    // 🔍 Search logic
+    if (search) {
+        filter.$or = [
+            { location: { $regex: search, $options: "i" } },
+            { country: { $regex: search, $options: "i" } },
+            { title: { $regex: search, $options: "i" } },
+        ];
+    }
+
+    // 📂 Category filter
+    if (category) {
+    filter.$or = [
+        ...(filter.$or || []),
+        { title: { $regex: category, $options: "i" } },
+        { location: { $regex: category, $options: "i" } }
+    ];
+}
+
+
+    const allListings = await Listing.find(filter);
+
+    res.render("listings/index", { allListings, search, category });
+};
 
     module.exports.renderNewFrom=(req,res)=>{
         res.render("listings/new.ejs");
@@ -50,7 +79,16 @@ module.exports.index=async(req,res)=>{
         newListing.owner=req.user._id;
         newListing.image={url,filename};
 
-        newListing.geometry= response.body.features[0].geometry;
+        if (response.body.features.length > 0) {
+    newListing.geometry = response.body.features[0].geometry;
+} else {
+    // fallback location (Delhi)
+    newListing.geometry = {
+        type: "Point",
+        coordinates: [77.1025, 28.7041]
+    };
+}
+
 
         let savedListing=await newListing.save();
         console.log(savedListing);

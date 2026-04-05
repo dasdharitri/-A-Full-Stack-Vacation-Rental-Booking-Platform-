@@ -27,16 +27,21 @@ const bookingRoutes = require("./routes/bookings.js");
 
 
 // const MONGO_URL ="mongodb://127.0.0.1:27017/wanderlust";
-const dbUrl=process.env.ATLASTDB_URL;
+const dbUrl=process.env.ATLASDB_URL;
 
-main().then(()=>{
-    console.log("connected to db");                                     
-}).catch((err) =>{console.log(err)
-
+main()
+.then(()=>{
+    console.log("Connected to MongoDB");
+})
+.catch((err)=>{
+    console.log("Database connection error:", err);
 });
 
 async function main() {
-    await mongoose.connect(dbUrl);
+    await mongoose.connect(dbUrl,{
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+});
     
 }
 app.set("view engine","ejs");
@@ -54,7 +59,7 @@ const store=MongoStore.create({
     touchAfter:24*3600,
 });
 
-store.on("error",()=>{
+store.on("error",(err)=>{
     console.log("ERROR in MONGO SESSIO STORE",err);
 });
 
@@ -82,6 +87,13 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use((req, res, next) => {
+    res.locals.currUser = req.user;
+    next();
+});
+
+
 passport.use(new LocalStrategy(User.authenticate()));
 
                                     
@@ -131,7 +143,9 @@ app.use((err,req,res,next)=>{
 //    res.status(statusCode).send(message);
 });
 
-app.listen(8080,()=>{
-    console.log("server is listening to port 8080");
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => {
+    console.log(`server is listening to port ${port}`);
 });
 

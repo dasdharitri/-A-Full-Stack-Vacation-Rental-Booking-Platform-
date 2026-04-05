@@ -1,0 +1,175 @@
+<% layout("/layouts/boilerplate", { currUser: currUser }) %>
+
+<div class="container mt-5 payment-container">
+
+    <h2 class="mb-4 text-center">Secure Payment</h2>
+
+    <form action="/payment" method="POST">
+
+        <!-- Payment Options -->
+        <label class="payment-option form-check">
+            <input class="form-check-input" type="radio" name="method" required>
+            <span class="option-content">
+                💳 Credit / Debit Card
+            </span>
+        </label>
+
+        <label class="payment-option form-check">
+            <input class="form-check-input" type="radio" name="method">
+            <span class="option-content">
+                📱 UPI (Google Pay / PhonePe)
+            </span>
+        </label>
+
+        <label class="payment-option form-check">
+            <input class="form-check-input" type="radio" name="method">
+            <span class="option-content">
+                🏦 Net Banking
+            </span>
+        </label>
+
+        <!-- Pay Button -->
+        <div class="text-center mt-4">
+            <button type="submit" id="payBtn" class="btn btn-success">Pay Now</button>
+            <br>
+            <span id="loader" style="display:none;">Processing Payment...</span>
+        </div>
+
+    </form>
+
+    <!-- Success Popup -->
+<div id="successPopup" class="success-popup">
+    <div class="popup-content">
+        <div class="checkmark-circle">
+            ✔
+        </div>
+        <h3>Payment Successful!</h3>
+        <p>Your booking is confirmed 🎉</p>
+
+        <a href="/listings" class="btn btn-danger mt-3">Go to Home</a>
+    </div>
+</div>
+    
+
+
+</div>
+
+<style>
+
+/* Page Animation */
+.payment-container {
+    animation: fadeIn 0.7s ease-in;
+}
+
+/* Payment Options Card */
+.payment-option {
+    display: block;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Hover Effect */
+.payment-option:hover {
+    background-color: #f9f9f9;
+    transform: scale(1.02);
+}
+
+/* Selected Effect */
+.payment-option input:checked + .option-content {
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Option Text */
+.option-content {
+    margin-left: 10px;
+    font-size: 1.1rem;
+}
+
+/* Button Animation */
+#payBtn {
+    transition: all 0.3s ease;
+}
+
+#payBtn:hover {
+    transform: scale(1.05);
+}
+
+/* Loader */
+#loader {
+    color: green;
+    font-weight: bold;
+    margin-top: 10px;
+    display: inline-block;
+    animation: blink 1s infinite;
+}
+
+/* Blink animation */
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* Popup background */
+.success-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+/* Popup box */
+.popup-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    animation: popUp 0.5s ease;
+}
+
+/* Checkmark circle */
+.checkmark-circle {
+    width: 80px;
+    height: 80px;
+    background: #28a745;
+    color: white;
+    font-size: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    animation: pop 0.4s ease;
+}
+
+/* Animations */
+@keyframes pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+@keyframes popUp {
+    from { transform: translateY(50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+
+</style>

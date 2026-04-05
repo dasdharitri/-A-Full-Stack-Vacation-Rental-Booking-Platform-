@@ -195,3 +195,24 @@
     -webkit-transition: background-position .7s;
     transition: background-position .7s;
   }
+
+  .review-card {
+  border-radius: 1rem;
+  padding: 1rem;
+  background: rgb(161, 209, 252);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: 0.3s;
+}
+
+.review-card:hover {
+  transform: translateY(-5px);
+}
+
+.stars {
+  color: #ffc107;
+  font-size: 1.2rem;
+  margin: 5px 0;
+}
+
+
+

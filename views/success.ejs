@@ -1,0 +1,46 @@
+<% layout("/layouts/boilerplate", { currUser: currUser }) %>
+
+<div class="success-container">
+
+    <div class="checkmark-circle">
+        ✔
+    </div>
+
+    <h2>Booking Confirmed!</h2>
+    <p>Your payment was successful 🎉</p>
+
+    <a href="/listings" class="btn btn-danger mt-3">Go to Home</a>
+
+</div>
+
+<style>
+.success-container {
+    text-align: center;
+    margin-top: 100px;
+    animation: fadeIn 0.8s ease-in;
+}
+
+.checkmark-circle {
+    width: 100px;
+    height: 100px;
+    background: #28a745;
+    color: white;
+    font-size: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    animation: pop 0.5s ease;
+}
+
+@keyframes pop {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>

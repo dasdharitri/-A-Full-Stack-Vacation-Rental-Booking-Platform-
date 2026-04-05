@@ -25,10 +25,10 @@
 </head>
 <body>
 
-    <%- include ("../includes/navbar.ejs") %>
+    <%- include ("../includes/navbar.ejs",{currUser: currUser}) %>
      
     <div class="container">
-        <%- include ("../includes/flash.ejs") %>
+        <%- include ("../includes/flash.ejs",{success:success, error: error}) %>
         <%- body %>
 
     </div>
