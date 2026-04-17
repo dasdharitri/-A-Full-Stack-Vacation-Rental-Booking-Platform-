@@ -116,8 +116,19 @@ module.exports.index = async (req, res) => {
     let listing=await Listing.findByIdAndUpdate(id,{...req.body.listing});
     
     if(typeof req.file !=="undefined"){
-    let url=req.file.path;
-    let filename=req.file.filename;
+    // let url=req.file.path;
+    // let filename=req.file.filename;
+
+    // ✅ Step 1: Check if image exists
+if (!req.file) {
+    req.flash("error", "Image upload failed!");
+    return res.redirect("/listings/new");
+}
+
+// ✅ Step 2: Then use file safely
+let url = req.file.path;
+let filename = req.file.filename;
+
     listing.image={url,filename};
     await listing.save();
     }
