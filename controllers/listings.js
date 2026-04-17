@@ -63,41 +63,52 @@ module.exports.index = async (req, res) => {
        
     };
 
-    module.exports.createListing=async(req,res,next)=>{
+    module.exports.createListing = async (req, res, next) => {
+    try {
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
 
-       let response=await geocodingClient
-       .forwardGeocode({
-            query: req.body.listing.location,
-            limit: 1,
-          })
+        // ✅ STEP 1: Check file FIRST
+        if (!req.file) {
+            req.flash("error", "Image upload failed!");
+            return res.redirect("/listings/new");
+        }
+
+        // ✅ STEP 2: Mapbox (keep after check)
+        let response = await geocodingClient
+            .forwardGeocode({
+                query: req.body.listing.location,
+                limit: 1,
+            })
             .send();
-            
 
-        let url=req.file.path;
-        let filename=req.file.filename;
-        const newListing=new Listing(req.body.listing);
-        newListing.owner=req.user._id;
-        newListing.image={url,filename};
+        let url = req.file.path;
+        let filename = req.file.filename;
+
+        const newListing = new Listing(req.body.listing);
+        newListing.owner = req.user._id;
+        newListing.image = { url, filename };
 
         if (response.body.features.length > 0) {
-    newListing.geometry = response.body.features[0].geometry;
-} else {
-    // fallback location (Delhi)
-    newListing.geometry = {
-        type: "Point",
-        coordinates: [77.1025, 28.7041]
-    };
-}
+            newListing.geometry = response.body.features[0].geometry;
+        } else {
+            newListing.geometry = {
+                type: "Point",
+                coordinates: [77.1025, 28.7041]
+            };
+        }
 
+        let savedListing = await newListing.save();
+        console.log("✅ SAVED:", savedListing);
 
-        let savedListing=await newListing.save();
-        console.log(savedListing);
-
-        req.flash("success","New Listing Created!");
+        req.flash("success", "New Listing Created!");
         res.redirect("/listings");
-    
-    
- };
+
+    } catch (err) {
+        console.log("🔥 ERROR:", err);
+        res.send("Error: " + err.message);
+    }
+};
 
  module.exports.renderEditForm=async(req,res)=>{
     let {id}=req.params;
