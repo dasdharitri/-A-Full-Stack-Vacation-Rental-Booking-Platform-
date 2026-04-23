@@ -64,17 +64,24 @@ module.exports.index = async (req, res) => {
     };
 
     module.exports.createListing = async (req, res, next) => {
-    try {
-        console.log("BODY:", req.body);
-        console.log("FILE:", req.file);
+    
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
 
-        // ✅ STEP 1: Check file FIRST
-        if (!req.file) {
-            req.flash("error", "Image upload failed!");
-            return res.redirect("/listings/new");
+    try {
+        
+
+        let url = "";
+        let filename = "";
+
+        if (req.file) {
+            url = req.file.path;
+            filename = req.file.filename;
+        } else {
+            url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e";
+            filename = "default";
         }
 
-        // ✅ STEP 2: Mapbox (keep after check)
         let response = await geocodingClient
             .forwardGeocode({
                 query: req.body.listing.location,
@@ -82,8 +89,7 @@ module.exports.index = async (req, res) => {
             })
             .send();
 
-        let url = req.file.path;
-        let filename = req.file.filename;
+            console.log("MAP RESPONSE:", response.body.features);
 
         const newListing = new Listing(req.body.listing);
         newListing.owner = req.user._id;

@@ -1,46 +1,39 @@
+const mapDiv = document.getElementById("map");
 
-        // let MAPTOKEN=MAPTOKEN;
-        // console.log(MAPTOKEN);
-        mapboxgl.accessToken=MAPTOKEN;
+// get values from HTML
+const coordinates = mapDiv.dataset.coordinates.split(",").map(Number);
+const image = mapDiv.dataset.image;
+const locationName = mapDiv.dataset.location;
+const token = mapDiv.dataset.token;
 
-        const map = new mapboxgl.Map({
-            container: "map", // container ID
-            style:"mapbox://styles/mapbox/streets-v12",
-            center:listing.geometry.coordinates, // starting position [lng, lat]
-            zoom: 8,
-        });
-      
-        
-         // create custom element
+console.log("Coordinates:", coordinates);
+
+mapboxgl.accessToken = token;
+
+const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/streets-v11",
+    center: coordinates,
+    zoom: 9,
+});
+
+// marker
 const el = document.createElement("div");
 el.className = "custom-marker";
 
-el.innerHTML = `
-  <img src="${listing.image.url}" />
-`;
+el.innerHTML = `<img src="${image}" />`;
 
-// ✅ ADD ANIMATION HERE
+// animation
 el.style.animation = "pop 0.5s ease";
 
-// create marker
 new mapboxgl.Marker(el)
-  .setLngLat(listing.geometry.coordinates)
+  .setLngLat(coordinates)
   .setPopup(
   new mapboxgl.Popup({ offset: 25 }).setHTML(
-    `<h4>${listing.location}</h4>
-     <p class="secure-text">🔒 Exact location will be provided after booking</p>`
+    `<h4>${locationName}</h4>
+     <p style="font-size:18px; color:red;">
+     🔒 Exact location will be provided after Booking.
+     </p>`
   )
 )
-
   .addTo(map);
-
-        
-
-        // .setLngLat(listing.geometry.coordinates)  //Listing.geomatry.coordinates
-        // .setPopup(
-        //   new mapboxgl.Popup({offset:25}).setHTML(
-        //   `<h4>${listing.location}</h4><p>Exact Location will be provided after booking</p>`
-        //   )
-        //   )
-        // .addTo(map);
-    

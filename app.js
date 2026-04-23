@@ -105,6 +105,7 @@ app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
     res.locals.currUser=req.user;
+    res.locals.MAPBOX_TOKEN = process.env.MAPBOX_TOKEN; // 👈 ADD THIS LINE
     // console.log(res.locals.success);
     next();
 });
